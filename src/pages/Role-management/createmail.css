@@ -1,0 +1,46 @@
+.createmail-card{
+    background: #f8f9fa;
+    opacity: 0.9;
+    max-width: 70vw;
+    min-height: 70vh;
+    margin-top: 130px;
+    border-radius: 16px;
+}
+.wrapper{
+    margin: 20px;
+}
+.createmail-table{
+    margin-top: 20px;
+}
+
+.modern-table {
+  overflow: scroll;
+  background: #fff;
+  border-radius: 10px;
+}
+
+.modern-table thead tr {
+  background: #8ca8f4 !important;
+  color: #fff;
+}
+
+.modern-table th, .modern-table td {
+  padding: 1.1rem 1rem;
+  vertical-align: middle;
+  border: none;
+}
+
+.modern-table tbody tr {
+  transition: background 0.2s;
+}
+
+.modern-table td {
+  font-size: 1.05em;
+}
+
+@media (max-width: 768px) {
+  .modern-table th, .modern-table td {
+    padding: 0.7rem 0.5rem;
+    font-size: 0.98em;
+  }
+}
