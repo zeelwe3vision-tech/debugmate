@@ -1,0 +1,303 @@
+body {
+    background-color: #F0F4F8;
+    color: #333;
+}
+/* body.dark .left-column{background: #1a1a1a;color: #ffffff;} */
+/* body.dark .right-sidebar{background: #1a1a1a;color: #ffffff;} */
+body.dark .widget{background: #1a1a1a;color: #ffffff;margin: 10px;border: 1px solid #ffffff;}
+body.dark .widget-title{color: #ffffff;}
+body.dark .stat-card{background: #1a1a1a;color: #ffffff;border: 1px solid #ffffff;}
+body.dark .stat-value{color: #ffffff;}
+body.dark .stat-title{color: #ffffff;}
+body.dark .ongoing-projects-widget{background: #1a1a1a;color: #ffffff;}
+body.dark .widget-title-btn{background: #1a1a1a;color: #ffffff;}
+body.dark .header-icons{background: #1a1a1a;color: #ffffff;}
+body.dark .icon-btn{background: #1a1a1a;color: #ffffff;}
+body.dark .project-card{background: #1a1a1a;color: #ffffff;}
+body.dark .date-tag{color: #000000;}
+body.dark .project-title{color: #ffffff;}
+body.dark .progress-bar-container{background: #c4b6b6;}
+body.dark .progress-section{background: #1a1a1a;color: #ffffff;}
+body.dark .project-subtitle{color: #ffffff;}
+body.dark .progress-tag{color: #000000;}
+body.dark .team-avatars img{background: #1a1a1a;color: #ffffff;}
+body.dark .add-member-btn{background: #1a1a1a;color: #ffffff;}
+body.dark .days-left-tag{color: #000000;}
+body.dark .right-sidebar .staff-info{background: #1a1a1a;color: #ffffff;}
+body.dark .right-sidebar .staff-info svg{background: #1a1a1a;color: #ffffff;}
+
+
+.dashboard-container {
+    padding: 2rem;
+    margin-top: 110px;
+  margin-left: 20px;
+  
+}
+
+.dashboard-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.left-column {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5 rem;
+}
+
+
+.main-content {
+    display: flex; 
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.right-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 250px;
+    
+}
+.widget {
+    /* background-color: #fff; */
+    /* border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); */ /* semi-transparent white */
+    backdrop-filter: blur(20px);               /* blur effect */
+    -webkit-backdrop-filter: blur(20px);       /* Safari support */
+    border-radius: 16px;                       /* optional rounded corners */
+    box-shadow: 0 8px 32px rgba(2, 2, 2, 0.2);  /* optional soft shadow */
+    padding: 2rem;
+}
+
+.widget-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* Stat Cards */
+.stat-card {
+    /* background-color: #fff; */
+    /* border-radius: 12px; */
+    /* padding: 1.5rem; */
+    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); */
+    text-align: center;
+    width: 170px;
+    backdrop-filter: blur(20px);               /* blur effect */
+    -webkit-backdrop-filter: blur(20px);       /* Safari support */
+    border-radius: 16px;                       /* optional rounded corners */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);  /* optional soft shadow */
+    padding: 2rem;
+    margin-left:  10px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3B82F6;
+}
+
+.stat-title {
+    color: #6B7280;
+}
+
+/* Remove Old Project Summary Table Styles */
+.project-summary { display: none; }
+
+/* Ongoing Projects Widget */
+.ongoing-projects-widget {
+    /* background-color: #fff; */
+    backdrop-filter: blur(20px);               /* blur effect */
+    -webkit-backdrop-filter: blur(20px);       /* Safari support */
+    border-radius: 16px;                       /* optional rounded corners */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    margin-left: -25px;
+    /* padding: 2rem; */
+    border: none;
+    padding: 1.5rem;
+}
+
+.ongoing-projects-widget .widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.widget-title-btn {
+    background-color: #1E293B;
+    color: white;
+    border: none;
+    border-radius: 9999px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.header-icons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.icon-btn {
+    background-color: #fff;
+    border: 1px solid #E2E8F0;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #64748B;
+    cursor: pointer;
+}
+
+.projects-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+}
+
+.project-card {
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 320px;
+    flex-shrink: 0;
+}
+
+.card-yellow { background-color: #FEF9C3; border: 1px solid #FDE68A; }
+.card-blue { background-color: #DBEAFE; border: 1px solid #BFDBFE; }
+.card-red { background-color: #FEE2E2; border: 1px solid #FECACA; }
+
+.project-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.date-tag {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.project-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1E293B;
+}
+
+.progress-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-subtitle {
+    color: #475569;
+    font-size: 0.9rem;
+}
+
+.progress-tag {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+.progress-bar-container {
+    height: 8px;
+    width: 100%;
+    background-color: #E5E7EB;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+}
+
+.project-card .progress-bar-container {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.card-yellow .progress-bar-fill { background-color: #F59E0B; }
+.card-blue .progress-bar-fill { background-color: #3B82F6; }
+.card-red .progress-bar-fill { background-color: #EF4444; }
+
+
+.project-card .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+.team-avatars {
+    display: flex;
+    align-items: center;
+}
+
+.team-avatars img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-left: -8px;
+    border: 2px solid #fff;
+}
+.team-avatars img:first-child {
+    margin-left: 0;
+}
+.add-member-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-left: -8px;
+    border: 2px solid #fff;
+    background-color: #E2E8F0;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.days-left-tag {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.right-sidebar .staff-info {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    width: 200px;
+}
+.right-sidebar .staff-info svg {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}

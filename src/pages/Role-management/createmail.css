@@ -1,0 +1,244 @@
+.createmail-container {
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .createmail-container {
+    background: #1a1a1a;
+    border: 1px solid #ffffff;
+}
+
+body.dark .employee-list-container {
+    background: #1a1a1a;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+body.dark .employee-list-header {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .employee-list-header h1 {
+    color: #ffffff;
+}
+
+body.dark .new-employee-btn {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .employee-list-controls {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .search-bar input {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .employee-table {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .employee-table th {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .employee-table td {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .icon-btn {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .icon-btn:hover {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .role-badge {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .role-admin {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .role-hr {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .role-employee {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .role-sales {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark .add-employee-form {
+    background: #1a1a1a;
+    color: #ffffff;
+}
+
+.employee-list-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    /* background-color: #f8f9fa; */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+    margin-top: 130px;
+    margin-left: 80px;
+    width: 70vw;
+    height: 77vh;
+
+}
+
+.employee-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.employee-list-header h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.new-employee-btn {
+    background-color: #7985e2;
+    color: black;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.employee-list-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: white;
+    opacity: 0.8;
+    width: 250px;
+}
+
+.employee-table {
+    width: 100%;
+    border-collapse: collapse;
+    /* background-color: white; */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+.employee-table th,
+.employee-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.employee-table th {
+    background-color: #939de4;
+    font-weight: bold;
+    color: #333;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #6a0dad;
+}
+
+.icon-btn:hover {
+    color: #4a0a7a;
+}
+
+.role-badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    color: white;
+    font-size: 12px;
+}
+
+.role-admin {
+    background-color: #2196f3;
+    opacity: 0.8;
+}
+
+.role-hr {
+    background-color: #ff9800;
+    opacity: 0.8;
+}
+
+.role-employee {
+    background-color: #4caf50;
+    opacity: 0.8;
+}
+
+.role-sales {
+    background-color: #f44336;
+    opacity: 0.8;
+}
+
+.add-employee-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    /* background-color: #fff; */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.add-employee-form input,
+.add-employee-form select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: white;
+    opacity: 0.8;
+    flex-grow: 1;
+}
+
+.add-employee-form button {
+    background-color: #7985e2;
+    color: black;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.add-employee-form button:hover {
+    background-color: #4a0a7a;
+}
