@@ -1,0 +1,39 @@
+.success-popup {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  padding: 32px 40px 24px 40px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: popup-fade-in 0.3s ease;
+}
+
+@keyframes popup-fade-in {
+  from { opacity: 0; transform: translate(-50%, -60%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.tick-animation {
+  margin-bottom: 12px;
+  animation: tick-pop 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+@keyframes tick-pop {
+  0% { transform: scale(0.2); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.success-message {
+  color: #4BB543;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 8px;
+} 
