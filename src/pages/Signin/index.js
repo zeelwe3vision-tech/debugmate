@@ -4,18 +4,30 @@ import { useContext } from 'react';
 import { MyContext } from '../../App';
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
-import google from '../../assets/images/google.png';
+import { useNavigate } from 'react-router-dom';
+import { IoMdArrowBack } from 'react-icons/io';
+import './signin.css';
 
 
 const SignIn = () => {
     const context = useContext(MyContext);
+    const navigate = useNavigate();
     useEffect(() => {
         context.setIshideSidebar(true);
+        return () => {
+            context.setIshideSidebar(false);
+        };
     }, [context]);
     return (
         <div className="login-section">
             <div className='login-box'>
-                <div className='logo text-center'>
+                <div className='d-flex justify-content-between align-items-center'>
+                    <span></span>
+                    <span className='arrow1' onClick={() => navigate(-1)} title="Back">
+                        <IoMdArrowBack />
+                    </span>
+                </div>
+                <div className='logo text-center justify-content-center align-items-center'>
                     <img src={logo} alt="logo" />
                     <h5 className='text mt-2'>Login to DebugMate</h5>
                 </div>
@@ -34,22 +46,6 @@ const SignIn = () => {
                         <div className='d-flex justify-content-between'>
                         <button className='btn btn-primary mt-8'>Login</button>
                         </div>
-                        <div className='d-flex justify-content-between'>
-                            <span className='text-muted mt-2'>Forgot password? <a href='/forgot-password'>Reset password</a></span>
-                        </div>
-                        <div className='d-flex justify-content-between mt-2'>
-                            <span className='line-height-1'></span>
-                            <span className='text rounded-pill mt-2'>or</span>
-                            <span className='line-height-1'></span>
-                        </div>
-                        <div className='justify-content-center'>
-                            <div className='d-flex position-relative'>
-                            <img src={google} alt="google" className='google-img position-absolute'/>
-                            <button className='button'>Continue with Google</button></div>
-                        </div>
-                       <div className='d-flex justify-content-between mt-3'>
-                        <span className='text-muted'>Don't have an account? <a href='/signup'>Sign up</a></span>
-                       </div>
                     </form>
                 </div>
             </div>
@@ -57,4 +53,4 @@ const SignIn = () => {
     )
 }
 
-export default SignIn;
+export default SignIn;
