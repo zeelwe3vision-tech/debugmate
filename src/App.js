@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect, createContext, } from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './component/header';
@@ -18,7 +18,10 @@ import Overview from './pages/Overview/Overview.js';
 import Setting from './pages/Setting/setting.js';
 import ProjectDetailsTable from './pages/project/ProjectDetailsTable';
 import DualChatbot from './pages/chatbot/DualChatbot.js';
-import Home from './pages/home/home.js';
+import DeveloperChat from './pages/chatbot/DeveloperChat';
+import DeveloperChatMobile from './pages/chatbot/DeveloperChatMobile';
+import DeveloperChatDashboard from './pages/chatbot/DeveloperChatDashboard';
+
 const MyContext = createContext();
 function App() {
   const [istoggleSidebar, setIstoggleSidebar] = useState(false);
@@ -40,16 +43,6 @@ function App() {
     }
   }, [istheme]);
 
-
-
-  useEffect(() => {
-    console.log(istoggleSidebar);
-  }, [istoggleSidebar]);
-
-  const location = window.location;
-  const isHomePage = location.pathname === '/' || location.pathname === '/home';
-
-
   const values={
     istoggleSidebar,
     setIstoggleSidebar,
@@ -64,46 +57,50 @@ function App() {
     userEmail,
     setUserEmail
   }
+  useEffect(() => {
+    console.log(istoggleSidebar);
+  }, [istoggleSidebar]);
+  
   return (
     <BrowserRouter>
-      <MyContext.Provider value={values}>
-        {isHomePage ? (
+    <MyContext.Provider value={values}>
+      {
+        ishideSidebar !== true &&
+        <Header />
+      }
+      <div className="main d-flex">
+        {
+          ishideSidebar !== true &&
+        <div className={`sidebarwrapper ${istoggleSidebar===true ? 'open' : ''}`}>
+          <Sidebar />
+        </div>
+        }
+        <div className={`content ${ishideSidebar===true && 'full'} ${istoggleSidebar===true ? 'open' : ''}`}>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/home" element={<Dashboard />} />
+            <Route path="/EmployeeProjectForm" element={<EmployeeProjectForm/>} />
+            <Route path="/chatbot/communication" element={<Communication />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/role-management/chooserole" element={<ChooseRole />} />
+            <Route path="/communication" element={<Communication />} />
+            <Route path="/chatbot/feedback" element={<Feedback />} />
+            <Route path="/role-management/createmail" element={<CreateMail />} />
+            <Route path="/announcements" element={<Announcements />} />
+            <Route path="/api-management" element={<ApiManagement />} />
+            <Route path="/overview" element={<Overview />} />
+            <Route path="/setting" element={<Setting />} />
             <Route path="/signin" element={<SignIn />} />
+            <Route path="/project/DetailsTable" element={<ProjectDetailsTable />} />
+            <Route path="/chatbot/DualChatbot" element={<DualChatbot />} />
+            <Route path="/chatbot/web" element={<DeveloperChat />} />
+            <Route path="/chatbot/mobile" element={<DeveloperChatMobile />} />
+            <Route path="/chatbot/dashboard" element={<DeveloperChatDashboard />} />
+            
           </Routes>
-        ) : (
-          <>
-            {ishideSidebar !== true && <Header />}
-            <div className="main d-flex">
-              {ishideSidebar !== true &&
-                <div className={`sidebarwrapper ${istoggleSidebar===true ? 'open' : ''}`}>
-                  <Sidebar />
-                </div>
-              }
-              <div className={`content ${ishideSidebar===true && 'full'} ${istoggleSidebar===true ? 'open' : ''}`}>
-                <Routes>
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/EmployeeProjectForm" element={<EmployeeProjectForm/>} />
-                  <Route path="/chatbot/communication" element={<Communication />} />
-                  <Route path="/role-management/chooserole" element={<ChooseRole />} />
-                  <Route path="/communication" element={<Communication />} />
-                  <Route path="/chatbot/feedback" element={<Feedback />} />
-                  <Route path="/role-management/createmail" element={<CreateMail />} />
-                  <Route path="/announcements" element={<Announcements />} />
-                  <Route path="/api-management" element={<ApiManagement />} />
-                  <Route path="/overview" element={<Overview />} />
-                  <Route path="/setting" element={<Setting />} />
-                  <Route path="/signin" element={<SignIn />} />
-                  <Route path="/project/DetailsTable" element={<ProjectDetailsTable />} />
-                  <Route path="/chatbot/DualChatbot" element={<DualChatbot />} />
-                </Routes>
-              </div>
-            </div>
-            <ChatbotIcon />
-          </>
-        )}
+        </div>
+      </div>
+      <ChatbotIcon />
       </MyContext.Provider>
     </BrowserRouter>
   );
