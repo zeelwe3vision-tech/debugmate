@@ -36,6 +36,8 @@
   border-bottom: 1px solid #444;
   display: flex;
   align-items: center;
+  --bs-card-cap-padding-y: 0.20rem;
+
 }
 
 /* Chat History */
@@ -545,10 +547,24 @@ body.dark .panel-header {
 } 
 
 .history-panel {
-  background: #fff !important;
-  border-radius: 32px !important;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.08) !important;
-  margin-top: 32px !important;
-  margin-bottom: 32px !important;
+  background: #f8f9fa !important;
+  border-radius: 16px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+  padding: 24px 12px 12px 12px !important;
+  margin-top: 72px !important;
+  margin-bottom: 0 !important;
   border: none !important;
+} 
+
+.chatbot-container {
+  background: #f8f9fa !important;
+  transition: width 0.4s cubic-bezier(.4,0,.2,1);
+}
+
+.chatbot-container.with-history {
+  width: 75% !important;
+}
+
+.chatbot-container.full-width {
+  width: 100% !important;
 } 
