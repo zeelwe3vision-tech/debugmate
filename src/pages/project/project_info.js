@@ -284,35 +284,63 @@ const EmployeeProjectForm = () => {
                     </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
-                    <Form.Label>Team Members</Form.Label>
-                    <div>
-                        {teamOptions.map((member) => (
-                            <Form.Check
-                                key={member}
-                                type="checkbox"
-                                id={`assignedTo-${member}`}
-                                label={member}
-                                name="assignedTo"
-                                value={member}
-                                checked={form.assignedTo.includes(member)}
-                                onChange={handleChange}
-                                className="mb-2"
-                            />
-                        ))}
-                    </div>
-                    <div className="d-flex mt-2">
-                        <Form.Control
-                            type="text"
-                            placeholder="Add custom team member"
-                            value={customTeamMember}
-                            onChange={e => setCustomTeamMember(e.target.value)}
-                            className="me-2"
-                        />
-                        <Button variant="outline-primary" type="button" onClick={handleAddCustomTeamMember} disabled={!customTeamMember.trim()}>
-                            Add
-                        </Button>
-                    </div>
-                </Form.Group>
+    <Form.Label>Team Member Emails</Form.Label>
+    <div className="d-flex">
+        <Form.Control
+            type="email"
+            placeholder="Enter team member email"
+            value={customTeamMember}
+            onChange={(e) => setCustomTeamMember(e.target.value)}
+            className="me-2"
+        />
+        <Button
+            variant="outline-primary"
+            type="button"
+            onClick={() => {
+                const email = customTeamMember.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert("Please enter a valid email address.");
+                    return;
+                }
+                if (!form.assignedTo.includes(email)) {
+                    setForm((prev) => ({
+                        ...prev,
+                        assignedTo: [...prev.assignedTo, email]
+                    }));
+                }
+                setCustomTeamMember("");
+            }}
+            disabled={!customTeamMember.trim()}
+        >
+            Add
+        </Button>
+    </div>
+
+    {form.assignedTo.length > 0 && (
+        <ul className="email-list mt-2">
+            {form.assignedTo.map((email, idx) => (
+                <li key={idx} className="email-item fade-in">
+                    <span>{email}</span>
+                    <Button
+                        variant="outline-danger"
+                        size="sm"
+                        onClick={() => {
+                            setForm((prev) => ({
+                                ...prev,
+                                assignedTo: prev.assignedTo.filter((e) => e !== email)
+                            }));
+                        }}
+                    >
+                        ✕
+                    </Button>
+                </li>
+            ))}
+        </ul>
+    )}
+</Form.Group>
+
+
                 <Form.Group className="mb-3">
                     <Form.Label>Client Name/Owner Name</Form.Label>
                     <Form.Control
