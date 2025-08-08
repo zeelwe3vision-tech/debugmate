@@ -9,7 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Feedback from './pages/chatbot/feedback';
 import ChooseRole from './pages/Role-management/chooserole';
 import CreateMail from './pages/Role-management/createmail.js';
-import Announcements from './pages/Announcements';
+
 import ChatbotIcon from './component/ChatbotIcon';
 import SignIn from './pages/Signin';
 import EmployeeProjectForm from './pages/project/project_info.js';
@@ -86,7 +86,7 @@ function App() {
             <Route path="/communication" element={<Communication />} />
             <Route path="/chatbot/feedback" element={<Feedback />} />
             <Route path="/role-management/createmail" element={<CreateMail />} />
-            <Route path="/announcements" element={<Announcements />} />
+
             <Route path="/api-management" element={<ApiManagement />} />
             <Route path="/overview" element={<Overview />} />
             <Route path="/setting" element={<Setting />} />
