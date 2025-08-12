@@ -37,6 +37,8 @@ const SignIn = () => {
             setError('Incorrect password.');
             return;
         }
+        
+        
         // 3. Proceed with Supabase Auth signIn
         if (context.setIsSignIn) context.setIsSignIn(true);
         if (context.setUsername) context.setUsername(userPerm.name); // for header
@@ -44,7 +46,26 @@ const SignIn = () => {
         // Log employee login event
         await databaseService.logEmployeeLogin({ email, name: userPerm.name, password });
         navigate('/dashboard');
+      
+        await fetch("http://localhost:5000/set_session", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include", // 🛡️ required to send session cookie!
+            body: JSON.stringify({ email }),
+          });
+
+          await fetch("http://localhost:5000/chat", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ email }),
+          });
     };
+};
 
     return (
         <div className="login-section">
