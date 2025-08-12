@@ -1,192 +1,360 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { BsPlusCircle } from 'react-icons/bs';
-import { IoSend } from 'react-icons/io5';
-import { FiFileText, FiDatabase, FiCode } from 'react-icons/fi';
-import './Communication.css';
 
-const suggestionData = [
-    { icon: <FiFileText />, text: 'Write a press release' },
-    { icon: <FiDatabase />, text: 'Design a database schema' },
-    { icon: <FiCode />, text: 'Write frontend code' },
-];
+// import React, { useState, useRef, useContext, useEffect } from 'react';
+// import ReactMarkdown from 'react-markdown';
+// import { MyContext } from '../../App';
 
-const PromptSuggestions = ({ onSuggestionClick }) => (
-    <div className="prompt-suggestions-container">
-        <h2 className="prompt-title">Start writing with GenAI</h2>
-        <div className="suggestions-grid">
-            {suggestionData.map((item, index) => (
-                <button key={index} className="suggestion-card" onClick={() => onSuggestionClick(item.text)}>
-                    <div className="card-icon">{item.icon}</div>
-                    <p className="card-text">{item.text}</p>
-                </button>
-            ))}
-        </div>
+// function Communication() {
+//   const { userEmail } = useContext(MyContext);
+//   const [messages, setMessages] = useState([]);
+//   const [inputText, setInputText] = useState('');
+//   const chatEndRef = useRef(null);
+
+//   useEffect(() => {
+//     if (userEmail) {
+//       fetch("http://localhost:5000/set_session", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         credentials: "include", // ⬅️ IMPORTANT
+//         body: JSON.stringify({ email: userEmail })
+//       })
+//       .then(res => {
+//         if (!res.ok) throw new Error("Failed to set session in Flask");
+//       })
+//       .catch(console.error);
+//     }
+//   }, [userEmail]);
+
+//   const sendMessage = async () => {
+//     if (inputText.trim() === '') return;
+//     setMessages(prev => [...prev, { role: 'user', content: inputText }]);
+
+//     try {
+//       const response = await fetch('http://localhost:5000/chat', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         credentials: 'include', // ⬅️ Ensure session cookie is sent
+//         body: JSON.stringify({ message: inputText })
+//       });
+
+//       const data = await response.json();
+//       setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+//     } catch (err) {
+//       console.error('Chat error:', err);
+//       setMessages(prev => [...prev, { role: 'assistant', content: 'Error connecting to chatbot.' }]);
+//     }
+
+//     setInputText('');
+//   };
+
+//   return (
+//     <div style={styles.container}>
+//       <div style={styles.chatBox}>
+//         {messages.map((msg, i) => (
+//           <div key={i} style={msg.role === 'user' ? styles.userMsg : styles.botMsg}>
+//             <strong>{msg.role === 'user' ? 'You' : 'Bot'}:</strong>
+//             <ReactMarkdown>{msg.content}</ReactMarkdown>
+//           </div>
+//         ))}
+//         <div ref={chatEndRef} />
+//       </div>
+//       <div style={styles.inputArea}>
+//         <input
+//           style={styles.input}
+//           type="text"
+//           value={inputText}
+//           onChange={(e) => setInputText(e.target.value)}
+//           placeholder="Type a message..."
+//         />
+//         <button style={styles.button} onClick={sendMessage}>Send</button>
+//       </div>
+//     </div>
+//   );
+// }
+
+// const styles = {
+//   container: {
+//     maxWidth: '600px',
+//     margin: '40px auto',
+//     border: '1px solid #ccc',
+//     borderRadius: '8px',
+//     padding: '20px',
+//     backgroundColor: '#f9f9f9',
+//     fontFamily: 'Arial',
+//   },
+//   chatBox: {
+//     maxHeight: '400px',
+//     overflowY: 'auto',
+//     marginBottom: '15px',
+//   },
+//   userMsg: {
+//     textAlign: 'right',
+//     margin: '10px 0',
+//     color: '#0a67ca',
+//   },
+//   botMsg: {
+//     textAlign: 'left',
+//     margin: '10px 0',
+//     color: '#333',
+//   },
+//   inputArea: {
+//     display: 'flex',
+//     gap: '10px',
+//   },
+//   input: {
+//     flex: 1,
+//     padding: '10px',
+//     fontSize: '16px',
+//   },
+//   button: {
+//     padding: '10px 20px',
+//     fontSize: '16px',
+//     cursor: 'pointer',
+//     backgroundColor: '#0a67ca',
+//     color: '#fff',
+//     border: 'none',
+//     borderRadius: '4px',
+//   }
+// };
+// // export default Communication;
+// import React, { useState, useRef, useContext, useEffect } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import ReactMarkdown from 'react-markdown';
+// import { MyContext } from '../../App';
+
+// function Communication() {
+//   const { userEmail } = useContext(MyContext);
+//   const [messages, setMessages] = useState([]);
+//   const [inputText, setInputText] = useState('');
+//   const chatEndRef = useRef(null);
+//   const navigate = useNavigate(); // 🔁 for redirect
+
+//   // 🔐 Redirect to /signin if not logged in
+//   useEffect(() => {
+//     if (!userEmail) {
+//       navigate('/signin');
+//     }
+//   }, [userEmail, navigate]);
+
+//   // Auto scroll
+//   useEffect(() => {
+//     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+//   }, [messages]);
+
+//   const sendMessage = async () => {
+//     if (inputText.trim() === '') return;
+
+//     setMessages(prev => [...prev, { role: 'user', content: inputText }]);
+
+//     try {
+//       const response = await fetch("/chat", {
+//         method: "POST",
+//         credentials: "include",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ message: inputText })
+//       });
+
+//       const data = await response.json();
+//       setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+//     } catch (err) {
+//       console.error("Chat error:", err);
+//       setMessages(prev => [...prev, { role: 'assistant', content: "❌ Chatbot error occurred." }]);
+//     }
+
+//     setInputText('');
+//   };
+
+//   return (
+//     <div style={styles.container}>
+//       <div style={styles.chatBox}>
+//         {messages.map((msg, i) => (
+//           <div key={i} style={msg.role === 'user' ? styles.userMsg : styles.botMsg}>
+//             <strong>{msg.role === 'user' ? 'You' : 'Bot'}:</strong>
+//             <ReactMarkdown>{msg.content}</ReactMarkdown>
+//           </div>
+//         ))}
+//         <div ref={chatEndRef} />
+//       </div>
+
+//       <div style={styles.inputArea}>
+//         <input
+//           style={styles.input}
+//           type="text"
+//           value={inputText}
+//           onChange={(e) => setInputText(e.target.value)}
+//           placeholder="Type a message..."
+//           onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+//         />
+//         <button style={styles.button} onClick={sendMessage}>Send</button>
+//       </div>
+//     </div>
+//   );
+// }
+
+// const styles = {
+//   container: {
+//     maxWidth: '600px',
+//     margin: '40px auto',
+//     border: '1px solid #ccc',
+//     borderRadius: '8px',
+//     padding: '20px',
+//     backgroundColor: '#f9f9f9',
+//     fontFamily: 'Arial',
+//   },
+//   chatBox: {
+//     maxHeight: '400px',
+//     overflowY: 'auto',
+//     marginBottom: '15px',
+//   },
+//   userMsg: {
+//     textAlign: 'right',
+//     margin: '10px 0',
+//     color: '#0a67ca',
+//   },
+//   botMsg: {
+//     textAlign: 'left',
+//     margin: '10px 0',
+//     color: '#333',
+//   },
+//   inputArea: {
+//     display: 'flex',
+//     gap: '10px',
+//   },
+//   input: {
+//     flex: 1,
+//     padding: '10px',
+//     fontSize: '16px',
+//   },
+//   button: {
+//     padding: '10px 20px',
+//     fontSize: '16px',
+//     cursor: 'pointer',
+//     backgroundColor: '#0a67ca',
+//     color: '#fff',
+//     border: 'none',
+//     borderRadius: '4px',
+//   }
+// };
+
+// export default Communication;
+import React, { useState, useRef, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import { MyContext } from '../../App';
+
+function Communication() {
+  const { userEmail } = useContext(MyContext);
+  const [messages, setMessages] = useState([]);
+  const [inputText, setInputText] = useState('');
+  const chatEndRef = useRef(null);
+  const navigate = useNavigate();
+
+  // 🔐 Redirect to signin if not logged in
+  useEffect(() => {
+    if (!userEmail) {
+      navigate('/signin');
+    }
+  }, [userEmail, navigate]);
+
+  // Auto scroll when new messages arrive
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const sendMessage = async () => {
+    if (inputText.trim() === '') return;
+
+    // Show user message immediately
+    setMessages(prev => [...prev, { role: 'user', content: inputText }]);
+
+    try {
+      const response = await fetch("http://localhost:5000/chat", {  // 👈 Full backend URL
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: inputText })
+      });
+
+      const data = await response.json();
+
+      // Show bot reply
+      setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+    } catch (err) {
+      console.error("Chat error:", err);
+      setMessages(prev => [...prev, { role: 'assistant', content: "❌ Chatbot error occurred." }]);
+    }
+
+    setInputText('');
+  };
+
+  return (
+    <div style={styles.container}>
+      <div style={styles.chatBox}>
+        {messages.map((msg, i) => (
+          <div key={i} style={msg.role === 'user' ? styles.userMsg : styles.botMsg}>
+            <strong>{msg.role === 'user' ? 'You' : 'Bot'}:</strong>
+            <ReactMarkdown>{msg.content}</ReactMarkdown>
+          </div>
+        ))}
+        <div ref={chatEndRef} />
+      </div>
+
+      <div style={styles.inputArea}>
+        <input
+          style={styles.input}
+          type="text"
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          placeholder="Type a message..."
+          onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+        />
+        <button style={styles.button} onClick={sendMessage}>Send</button>
+      </div>
     </div>
-);
+  );
+}
 
-const Communication = () => {
-    const [messages, setMessages] = useState([]);
-    const [input, setInput] = useState('');
-    const [chatHistory, setChatHistory] = useState(() => {
-        const saved = localStorage.getItem('communication_chat_history');
-        if (saved) {
-            try {
-                const parsed = JSON.parse(saved);
-                if (Array.isArray(parsed) && parsed.every(item => item.summary && Array.isArray(item.fullChat) && item.fullChat.length > 0)) {
-                    return parsed;
-                }
-            } catch (e) {}
-        }
-        return [];
-    });
-    const [showBgImage, setShowBgImage] = useState(false);
-    const [historyOpen, setHistoryOpen] = useState(true);
-    const chatEndRef = useRef(null);
-
-    useEffect(() => {
-        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
-
-    useEffect(() => {
-        localStorage.setItem('communication_chat_history', JSON.stringify(chatHistory));
-    }, [chatHistory]);
-
-    const handleSend = (text = input) => {
-        if (text.trim() === '') return;
-
-        const newMessages = [...messages, { sender: 'user', text }];
-        setMessages(newMessages);
-        setInput('');
-        setShowBgImage(true);
-
-        setTimeout(() => {
-            const botReply = { sender: 'bot', text: "I'm just a demo bot!" };
-            const updatedMessages = [...newMessages, botReply];
-            setMessages(updatedMessages);
-            // Only create a new history item if this is a new session (i.e., messages is empty)
-            const isNewSession =
-                chatHistory.length === 0 || messages.length === 0;
-            if (isNewSession) {
-                setChatHistory(prevHist => [
-                    ...prevHist,
-                    {
-                        id: Date.now(),
-                        summary: text, // First user message as summary
-                        fullChat: updatedMessages,
-                    },
-                ]);
-            } else {
-                // Update last history item's fullChat
-                setChatHistory(prevHist =>
-                    prevHist.length === 0
-                        ? prevHist
-                        : prevHist.map((chat, idx) =>
-                            idx === prevHist.length - 1
-                                ? { ...chat, fullChat: updatedMessages }
-                                : chat
-                        )
-                );
-            }
-        }, 800);
-    };
-
-    const handleSuggestionClick = (prompt) => {
-        handleSend(prompt);
-    };
-
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter') handleSend();
-    };
-
-    const handleHistoryClick = (chat) => {
-        setMessages(chat.fullChat);
-        setShowBgImage(true);
-    };
-
-    const handleHistoryDelete = (id) => {
-        setChatHistory(prev => prev.filter(chat => chat.id !== id));
-    };
-
-    return (
-        <div className={`communication-bg ${showBgImage ? "show-bg-image" : ""}`}>
-            <div className="page-center">
-                <div className="chatbot-layout">
-                        {/* Toggle Button */}
-                        <button
-                        className="history-toggle-btn"
-                        onClick={() => setHistoryOpen(open => !open)}
-                        aria-label={historyOpen ? 'Hide history' : 'Show history'}
-                    >
-                        {historyOpen ? '→' : '←'}
-                    </button>
-                    {/* Main Chat Area */}
-                    <div className={`chatbot-container${historyOpen ? ' with-history' : ' full-width'}`}>
-                        {messages.length === 0 ? (
-                            <div id='header'>
-                                <div className="chatbot-header1">Hello, there</div>
-                                <div className="chatbot-subheader">How can I help you today?</div>
-                            </div>
-                        ) : (
-                            <div className='bg'>
-                                <div className="chatbot-header2">Communication</div>
-                            </div>
-                        )}
-                        <div className="chatbot-messages">
-                            {messages.length === 0 ? (
-                                <PromptSuggestions onSuggestionClick={handleSuggestionClick} />
-                            ) : (
-                                messages.map((msg, idx) => (
-                                    <div key={idx} className={`message-bubble ${msg.sender}`}>
-                                        <p>{msg.text}</p>
-                                    </div>
-                                ))
-                            )}
-                            <div ref={chatEndRef} />
-                        </div>
-                        <div className="chatbot-input-area">
-                            
-                            <div className="input-wrapper">
-                                <button className="attach-btn">
-                                    <BsPlusCircle />
-                                </button>
-                                <input
-                                    type="text"
-                                    placeholder="Type your message..."
-                                    value={input}
-                                    onChange={e => setInput(e.target.value)}
-                                    onKeyDown={handleKeyDown}
-                                />
-                            </div>
-                            <button className="send-btn" onClick={() => handleSend()} >
-                                <IoSend />
-                            </button>
-                        </div>
-                    </div>
-                    {/* Chat History Sidebar */}
-                    <div className={`chat-history-panel${historyOpen ? ' open' : ' closed'}`}>
-                        <h3 className='txt'>History</h3>
-                        {chatHistory.length === 0 ? (
-                            <p>No previous chats</p>
-                        ) : (
-                            chatHistory.filter(chat => chat.summary && Array.isArray(chat.fullChat) && chat.fullChat.length > 0).map((chat) => (
-                                <div key={chat.id} className="history-item" onClick={() => handleHistoryClick(chat)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                    <span>{chat.summary}</span>
-                                    <button
-                                        className="history-delete-btn"
-                                        onClick={e => { e.stopPropagation(); handleHistoryDelete(chat.id); }}
-                                        title="Delete chat"
-                                        style={{ marginLeft: '10px', color: '#d11a2a', background: 'none', border: 'none', fontSize: '1.1rem', cursor: 'pointer' }}
-                                    >
-                                        ✕
-                                    </button>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+const styles = {
+  container: {
+    maxWidth: '600px',
+    margin: '40px auto',
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    padding: '20px',
+    backgroundColor: '#f9f9f9',
+    fontFamily: 'Arial',
+  },
+  chatBox: {
+    maxHeight: '400px',
+    overflowY: 'auto',
+    marginBottom: '15px',
+  },
+  userMsg: {
+    textAlign: 'right',
+    margin: '10px 0',
+    color: '#0a67ca',
+  },
+  botMsg: {
+    textAlign: 'left',
+    margin: '10px 0',
+    color: '#333',
+  },
+  inputArea: {
+    display: 'flex',
+    gap: '10px',
+  },
+  input: {
+    flex: 1,
+    padding: '10px',
+    fontSize: '16px',
+  },
+  button: {
+    padding: '10px 20px',
+    fontSize: '16px',
+    cursor: 'pointer',
+    backgroundColor: '#0a67ca',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+  }
 };
 
 export default Communication;
