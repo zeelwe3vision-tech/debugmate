@@ -55,13 +55,6 @@
 
 ---
 
-## 🔍 **Project Highlights (Portfolio)**
-
-| Project Name       | Description                                                                |
-| ------------------ | -------------------------------------------------------------------------- |
-| **Virtual Office** | Interactive 3D workspaces for virtual collaboration                        |
-| **Cyber AI Bot**   | ConvAI-based AI bot for cybersecurity education in VR                      |
-| **PMGSY Roadwork** | VR project digitizing Indian rural road infrastructure (Metaverse-enabled) |
 
 *More projects: [portfolio.we3visioninfotech.com](https://portfolio.we3visioninfotech.com)*
 
