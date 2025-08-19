@@ -176,9 +176,6 @@ const SignIn = () => {
 
     };
 
-
-    
-
     return (
         <div className="login-section">
             <div className='login-box'>
