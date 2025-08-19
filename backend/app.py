@@ -161,7 +161,7 @@
 #         res = requests.post(
 #             "https://openrouter.ai/api/v1/chat/completions",
 #             headers={
-#                 "Authorization": f"Bearer {'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'}",
+#                 "Authorization": f"Bearer {'sk-or-v1-57b95118f533977391ac938782fdad1afc35e66a11d8670e248fddcc484da'}",
 #                 "Content-Type": "application/json"
 #             },
 #             json={
