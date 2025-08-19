@@ -1609,7 +1609,7 @@ def call_openrouter(messages, temperature=0.5, max_tokens=1000):
         res = requests.post(
             "https://openrouter.ai/api/v1/chat/completions",
             headers={
-                "Authorization": f"Bearer {'sk-or-v1-f5b211c54f3b6aeac291460abc7ba6d253625a946200fddae4e4296d6189c'}",
+                "Authorization": f"Bearer {'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'}",
                 "Content-Type": "application/json"
             },
             json={
@@ -1798,17 +1798,28 @@ def llm_response(user_input):
     return {"reply": reply}
 
 # --- Greeting prompt handling logic ---
-import random
-import re
+import re, random
 from datetime import datetime
 
 def handle_greetings(user_message: str, user_name: str = None):
-    """Detect greetings and generate varied, contextual replies."""
+    """Detect greetings or acknowledgement words and reply more naturally."""
     normalized = user_message.lower().strip()
+
+    # Category 1: Greetings
     greeting_patterns = [
-        r"\bhi\b", r"\bhello\b", r"\bhey\b", r"\bgood\s*morning\b",
-        r"\bgood\s*afternoon\b", r"\bgood\s*evening\b", r"\bgm\b", r"\bga\b", r"\bge\b"
+        r"\bhi\b", r"\bhello\b", r"\bhey\b",
+        r"\bgood\s*morning\b", r"\bgood\s*afternoon\b", r"\bgood\s*evening\b",
+        r"\bgm\b", r"\bga\b", r"\bge\b"
     ]
+
+    # Category 2: Acknowledgements / Filler words
+    ack_patterns = [
+        r"\bok\b", r"\bhmm+\b", r"\byeah+\b", r"\bya\b", r"\byup+\b",
+        r"\bgreat\b", r"\bnice\b", r"\bcool\b", r"\bsure\b", r"\bright\b",
+        r"\bamazing\b", r"\bperfect\b", r"\bgood\b"
+    ]
+
+    # --- GREETING DETECTION ---
     if any(re.search(pattern, normalized) for pattern in greeting_patterns):
         current_hour = datetime.now().hour
         if current_hour < 12:
@@ -1817,23 +1828,41 @@ def handle_greetings(user_message: str, user_name: str = None):
             tod = "afternoon"
         else:
             tod = "evening"
+
         if user_name:
             templates = [
-                f"Good {tod}, {user_name}! 🌞 How’s your day going?",
-                f"Hey {user_name}! 👋 Hope you’re having a great {tod}.",
-                f"Hi {user_name}, always nice to chat with you 😊",
-                f"Hello {user_name}! 🌟 What can I do for you today?",
-                f"Hey {user_name}, welcome back! 🚀"
+                f"Good {tod}, {user_name}! How’s your day going?",
+                f"Hey {user_name}! Hope you’re having a nice {tod}.",
+                f"Hi {user_name}, always good to hear from you.",
+                f"Hello {user_name}! What’s up?",
+                f"Hey {user_name}, glad you’re here!"
             ]
         else:
             templates = [
-                f"Good {tod}! 🌞 How can I help you?",
-                f"Hey there! 👋 Hope you’re having a great {tod}.",
-                "Hi! 😊 What would you like to know today?",
-                "Hello! 🌟 How can I assist you?",
-                "Hey! 🚀 Always happy to help."
+                f"Good {tod}! How can I help you?",
+                f"Hey there! Hope you’re having a good {tod}.",
+                "Hi! What’s on your mind?",
+                "Hello! How can I assist?",
+                "Hey! Glad to chat with you."
             ]
         return random.choice(templates)
+
+    # --- ACKNOWLEDGEMENT DETECTION ---
+    if any(re.search(pattern, normalized) for pattern in ack_patterns):
+        ack_replies = [
+            "Yeah 👍",
+            "Cool 😎",
+            "Got it!",
+            "Sure thing.",
+            "Alright!",
+            "Perfect 👌",
+            "Nice one.",
+            "Makes sense.",
+            "Exactly.",
+            "Right on."
+        ]
+        return random.choice(ack_replies)
+
     return None
 
 # ====================== STRONG ROLE-BASED QUERY FILTERING ======================
