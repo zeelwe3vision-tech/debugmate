@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -53,7 +52,7 @@ function Communication() {
     setMessages(prev => [...prev, { role: 'user', content: inputText }]);
 
     try {
-      const response = await fetch('http://localhost:5000/chat', {
+      const response = await fetch('http://localhost:5000/chat/common', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include', // 👈 important to send session cookie
