@@ -1,8 +1,13 @@
 flask
-flask_session
+flask-session
+flask-cors
 python-dotenv
-langchain-community
-langchain-text-splitters
+tabulate
+requests
 chromadb
 supabase
-requests 
+langchain-community
+langchain-huggingface
+sentence-transformers
+torch        # required for HuggingFace + sentence-transformers
+transformers # required for HuggingFace models
