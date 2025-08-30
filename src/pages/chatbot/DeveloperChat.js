@@ -1,89 +1,165 @@
+
 import React, { useRef, useEffect, useState } from 'react';
-import { Card, Form, Button, InputGroup } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { FaCode, FaPaperclip } from 'react-icons/fa';
 import './DualChatbot.css';
+import { useContext } from 'react';
+import { MyContext } from '../../App';
 
-const initialMockMessages = [
-  { from: 'bot', text: 'Upload your code file or ask a developer question.' },
-  { from: 'user', text: 'Can you review my code?' },
-  { from: 'bot', text: 'Sure! Please upload your file.' },
-];
 
-const DeveloperChat = () => {
-  const [messages, setMessages] = useState(initialMockMessages);
-  const [input, setInput] = useState('');
-  const [chatHistory, setChatHistory] = useState(() => {
-    const saved = localStorage.getItem('chatHistory_web_designing_prototyping');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.every(item => item.fullChat)) {
-          return parsed;
-        }
-      } catch (e) {}
-    }
+const getInitialMessages = (projectInfo) => {
+  if (projectInfo.projectId) {
     return [
-      {
-        id: 1,
-        summary: initialMockMessages.find(m => m.from === 'user')?.text || '',
-        fullChat: initialMockMessages,
-      },
+      { from: 'bot', text: `Hello! I'm here to help you with your project "${projectInfo.projectName}". You can ask me questions about development, code review, or upload files for analysis.` },
     ];
-  });
-  const [historyOpen, setHistoryOpen] = useState(true);
-  const chatEndRef = useRef(null);
-  const [sessionActive, setSessionActive] = useState(false);
+  }
+  return [
+    { from: 'bot', text: 'Upload your code file or ask a developer question.' },
+  ];
+};
 
+const DeveloperChat = ({ projectInfo = {} }) => {
+  const [messages, setMessages] = useState(getInitialMessages(projectInfo));
+  const [input, setInput] = useState('');
+  const chatEndRef = useRef(null);
+  const [chatHistory, setChatHistory] = useState([]);
+  const [historyOpen, setHistoryOpen] = useState(true);
+  const [sessionActive, setSessionActive] = useState(false);
+  const context = useContext(MyContext);
+  const userEmail = context.userEmail;
+  const userName = context.userName || "User";
+  const userRole = context.userRole || "employee";
+  
+  // Auto-scroll to bottom
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  useEffect(() => {
-    localStorage.setItem('chatHistory_web_designing_prototyping', JSON.stringify(chatHistory));
-  }, [chatHistory]);
+  // Save to localStorage per project
+  const storageKey = projectInfo.projectId
+    ? `chatHistory_project_${projectInfo.projectId}`
+    : 'chatHistory_web_designing_prototyping';
 
-  const handleSend = (text = input) => {
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(chatHistory));
+  }, [chatHistory, storageKey]);
+
+  // Restore last chat
+  useEffect(() => {
+    const saved = localStorage.getItem(storageKey);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          setChatHistory(parsed);
+          const last = parsed[parsed.length - 1];
+          if (last?.fullChat) setMessages(last.fullChat);
+        }
+      } catch (e) {
+        console.error("Failed to parse chat history", e);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+
+  // Set session once DualChat mounts
+useEffect(() => {
+  const setSession = async () => {
+    if (!userEmail) return;
+    try {
+      await fetch("http://localhost:5000/set_session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email: userEmail, name: userName })
+      });
+      console.log("✅ Session set for Dual Chat");
+    } catch (error) {
+      console.error("❌ Failed to set session:", error);
+    }
+  };
+  setSession();
+}, [userEmail, userName]);
+
+
+  // 🔑 Send message to Flask backend
+  const handleSend = async (text = input) => {
     if (text.trim() === '') return;
+
     const newMessages = [...messages, { from: 'user', text }];
     setMessages(newMessages);
     setInput('');
     setSessionActive(true);
-    setTimeout(() => {
-      const botReply = { from: 'bot', text: "I'm just a demo bot!" };
+
+    try {
+      const response = await fetch("http://localhost:5000/chat/dual", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          message: text,   // 🔑 use "message" (your Flask route checks this)
+          project_id: projectInfo?.projectId || "default"
+        }),
+      });
+      
+      console.log("📤 Sending payload:", {
+        message: text,
+        project_id: projectInfo?.projectId || "default"
+      });
+      
+      const data = await response.json();
+      const botReply = { from: 'bot', text: data.reply || "⚠️ No reply from server" };
+
       const updatedMessages = [...newMessages, botReply];
       setMessages(updatedMessages);
-      if (!sessionActive) {
-        // New session: create new history item
-        setChatHistory(prev => [
-          ...prev,
-          {
-            id: Date.now(),
-            summary: text, // First user message as heading
-            fullChat: updatedMessages,
-          },
-        ]);
-      } else {
-        // Update last history item's fullChat
-        setChatHistory(prev =>
-          prev.length === 0
-            ? prev
-            : prev.map((chat, idx) =>
-                idx === prev.length - 1
-                  ? { ...chat, fullChat: updatedMessages }
-                  : chat
-              )
-        );
-      }
-    }, 800);
-  };
 
-  const handleNewChat = () => {
-    setMessages(initialMockMessages);
-    setSessionActive(false);
+      // Save chat thread
+      if (projectInfo.projectId) {
+        setChatHistory(prev => {
+          if (!prev || prev.length === 0) {
+            return [{ id: projectInfo.projectId, summary: text, fullChat: updatedMessages }];
+          }
+          return prev.map((chat, idx) =>
+            idx === prev.length - 1
+              ? { ...chat, summary: chat.summary || text, fullChat: updatedMessages }
+              : chat
+          );
+        });
+      } else {
+        if (!sessionActive) {
+          setChatHistory(prev => [
+            ...prev,
+            { id: Date.now(), summary: text, fullChat: updatedMessages },
+          ]);
+        } else {
+          setChatHistory(prev =>
+            prev.map((chat, idx) =>
+              idx === prev.length - 1 ? { ...chat, fullChat: updatedMessages } : chat
+            )
+          );
+        }
+      }
+    } catch (error) {
+      console.error("❌ Chat request failed:", error);
+      setMessages(prev => [...prev, { from: 'bot', text: "Error connecting to chatbot." }]);
+    }
   };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') handleSend();
+  };
+
+  const handleNewChat = () => {
+    setMessages(getInitialMessages(projectInfo));
+    setSessionActive(false);
+    if (projectInfo.projectId) {
+      setChatHistory(prev =>
+        prev.map((chat, idx) =>
+          idx === prev.length - 1 ? { ...chat, fullChat: getInitialMessages(projectInfo) } : chat
+        )
+      );
+    }
   };
 
   const handleHistoryClick = (chat) => {
@@ -92,55 +168,58 @@ const DeveloperChat = () => {
 
   const handleHistoryDelete = (id) => {
     setChatHistory(prev => prev.filter(chat => chat.id !== id));
-  };
-
-  const panelClass = 'web-chatbot-history-panel';
-  const panelTitle = 'Web Chatbot History';
-
-  return (
+  };  return (
     <div className="chatbot-layout">
       {/* Main Chat Area */}
-      <div className={`chatbot-container developer-chat-card${historyOpen ? ' with-history' : ' full-width'}`}> 
+      <div className={`chatbot-container developer-chat-card${historyOpen ? ' with-history' : ' full-width'}`}>
         <Card className="chatbot-card developer-chat-card">
           <Card.Header className="d-flex align-items-center">
-            <FaCode className="me-2" /> <span>Web Designing Prototyping</span>
+            <FaCode className="me-2" /> <span>Developer Chatbot</span>
           </Card.Header>
+
+          {projectInfo.projectId && (
+            <div className="project-info-banner" style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              padding: '12px 20px',
+              fontSize: '14px',
+              borderBottom: '1px solid #e9ecef'
+            }}>
+              <strong>Project:</strong> {projectInfo.projectName || 'Unknown Project'}
+              {projectInfo.projectId && <span style={{ marginLeft: '10px', opacity: 0.8 }}>(ID: {projectInfo.projectId})</span>}
+            </div>
+          )}
+
           <Card.Body className="chat-history">
             {messages.map((msg, idx) => (
               <div key={idx} className={`chat-bubble ${msg.from}`}>{msg.text}</div>
             ))}
             <div ref={chatEndRef} />
           </Card.Body>
+
           <Card.Footer>
-            <InputGroup>
-              <Form.Label htmlFor="file-upload" className="mb-0 file-upload-label">
-                <FaPaperclip />
-                <Form.Control type="file" id="file-upload" className="d-none" />
-              </Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Type your message..."
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-              />
-              <Button variant="primary" className="me-2" onClick={() => handleSend()}>Send</Button>
-            </InputGroup>
+            <div className="chatbot-input-area">
+              <div className="input-wrapper">
+                <button className="attach-btn"><FaPaperclip /></button>
+                <input
+                  type="text"
+                  placeholder="Type your message..."
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+                <button className="send-btn" onClick={() => handleSend()}>Send</button>
+              </div>
+            </div>
           </Card.Footer>
         </Card>
       </div>
-      {/* Chat History Sidebar */}
-      <div className={`history-panel${historyOpen ? '' : ' closed'}`}> 
+
+      {/* History Panel */}
+      <div className={`history-panel${historyOpen ? '' : ' closed'}`}>
         <div className="panel-header">
-          <h3>{panelTitle}</h3>
-          <button
-            className="history-toggle-btn"
-            onClick={() => setHistoryOpen(false)}
-            title="Close history panel"
-            aria-label="Close history panel"
-          >
-            &rarr;
-          </button>
+          <h3>Chat History</h3>
+          <button onClick={() => setHistoryOpen(false)} className="history-toggle-btn">&rarr;</button>
         </div>
         <div className="history-list">
           {chatHistory.length === 0 ? (
@@ -157,8 +236,7 @@ const DeveloperChat = () => {
                 <button
                   className="history-delete-btn"
                   onClick={e => { e.stopPropagation(); handleHistoryDelete(chat.id); }}
-                  title="Delete chat"
-                >
+            >
                   ✕
                 </button>
               </div>
@@ -166,20 +244,12 @@ const DeveloperChat = () => {
           )}
         </div>
       </div>
-      {/* Show open button when panel is closed */}
+
       {!historyOpen && (
-        <button
-          className="history-toggle-btn open-panel-btn"
-          onClick={() => setHistoryOpen(true)}
-          title="Open history panel"
-          aria-label="Open history panel"
-        >
-          &larr;
-        </button>
+        <button className="history-toggle-btn open-panel-btn" onClick={() => setHistoryOpen(true)}>&larr;</button>
       )}
     </div>
   );
 };
 
-export default DeveloperChat; 
-
+export default DeveloperChat;
